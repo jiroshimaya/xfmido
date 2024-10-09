@@ -98,9 +98,55 @@ def test_init_with_mock_midi():
     assert xfkm_end_of_track.type == 'end_of_track'
     assert xfkm_end_of_track.time == 0
 
+def test_init_with_mock_midi_and_filename():
+    import os
+    import uuid
+    # Create a mock MIDI file and save it to a temporary file
+    mock_midi = create_mock_midi()
+    temp_midi_filename = f"temp_mock_midi_{uuid.uuid4().hex}.mid"
+    with open(temp_midi_filename, "wb") as f:
+        f.write(mock_midi.getbuffer())
+
+    try:
+        # Initialize XFMidiFile using the file name
+        xfmidi_from_file = XFMidiFile(temp_midi_filename)
+
+        # Initialize XFMidiFile using the file stream
+        xfmidi_from_stream = XFMidiFile(file=mock_midi)
+
+        # Check if both initializations result in the same data
+        assert xfmidi_from_file.tracks == xfmidi_from_stream.tracks
+        assert xfmidi_from_file.xfih == xfmidi_from_stream.xfih
+        assert xfmidi_from_file.xfkm == xfmidi_from_stream.xfkm
+    finally:
+        # Delete the temporary file
+        os.remove(temp_midi_filename)
+
+
 def test_extract_xf_karaoke_info():
     info = extract_xf_karaoke_info(file=create_mock_midi())
     assert info['song_id'] == '$Lyrc'
     assert info['melody_channel'] == 1
     assert info['time_offset'] == 312
     assert info['language'] == 'JP'
+
+def test_extract_xf_karaoke_info_with_filename():
+    import os
+    import uuid
+    # Create a mock MIDI file and save it to a temporary file
+    mock_midi = create_mock_midi()
+    temp_midi_filename = f"temp_mock_midi_{uuid.uuid4().hex}.mid"
+    with open(temp_midi_filename, "wb") as f:
+        f.write(mock_midi.getbuffer())
+
+    try:
+        # Extract XF Karaoke info using the file name
+        info_from_file = extract_xf_karaoke_info(temp_midi_filename)
+
+        info_from_stream = extract_xf_karaoke_info(file=mock_midi)
+
+        # Check if both results are the same
+        assert info_from_file == info_from_stream
+    finally:
+        # Delete the temporary file
+        os.remove(temp_midi_filename)
