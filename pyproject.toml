@@ -25,5 +25,12 @@ dev-dependencies = [
     "ipython>=8.28.0",
     "pytest>=8.3.3",
     "ipykernel>=6.29.5",
+    "taskipy>=1.13.0",
 ]
+
+[tool.taskipy.tasks]
+test = "pytest"
+lint = "uvx ruff check ."
+format = "uvx ruff format ."
+
 
