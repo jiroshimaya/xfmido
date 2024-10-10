@@ -5,17 +5,14 @@ XFMIDOは、XF（拡張フォーマット）MIDIデータ処理のためのPytho
 ## 特徴
 
 - XF準拠のヘッダー（XFIH）およびカラオケ情報（XFKM）チャンクの読み取り
-- 標準的なMIDIファイル（SMF）の読み取りにも対応
-
-## インストール
-
-pipを使用してXFMIDOをインストールできます：
+- 標準的なMIDIファイル（SMF）の読み取りも可能
 
 ## 使い方
 
 ```
 pip install xfmido
 ```
+
 
 ```python
 from xfmido import XFMidiFile
