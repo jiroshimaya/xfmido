@@ -56,7 +56,3 @@ MidiTrack([
   MetaMessage('lyrics', text='Hello World', time=0),
   MetaMessage('end_of_track', time=0)])
 ```
-
-
-
-
