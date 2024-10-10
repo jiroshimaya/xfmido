@@ -56,3 +56,15 @@ MidiTrack([
   MetaMessage('lyrics', text='Hello World', time=0),
   MetaMessage('end_of_track', time=0)])
 ```
+
+# 開発者向け
+
+- パッケージ管理に[uv](https://github.com/astral-sh/uv)を使用しています。
+- コマンド管理に[taskipy](https://github.com/taskipy/taskipy)を使用しています。
+
+```
+uv run task test
+uv run task lint
+uv run task format
+```
+
