@@ -58,6 +58,11 @@ MidiTrack([
   MetaMessage('end_of_track', time=0)])
 ```
 
+## Background
+The XF format is an extension of the standard MIDI file format developed by Yamaha Corporation and is widely used in Japan. Most MIDI files available for purchase on Yamaha's website conform to this specification. Detailed specifications of the XF format can be found at the following link: https://jp.yamaha.com/files/download/other_assets/7/321757/xfspc.pdf
+
+Since mido does not read the dedicated chunks of the XF specification, if lyrics information, etc., is written there, it cannot be retrieved. If it can be retrieved, it is expected to be convenient for the development of various applications, as lyrics, timing, and melody can be obtained. Therefore, I wanted to extend mido to read chunks with XF-specific XFIH and XFKM headers.
+
 
 # For Developers
 
