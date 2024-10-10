@@ -1,7 +1,7 @@
 import pytest
 import io
 from mido import MidiFile
-from xfmido.xfmido import XFMidiFile, extract_xf_karaoke_info
+from src.xfmido.xfmido import XFMidiFile, extract_xf_karaoke_info
 
 def create_mock_midi() -> io.BytesIO:
     # Create a mock MIDI file in bytes
