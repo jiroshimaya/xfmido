@@ -17,6 +17,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+urls = { "Homepage" = "https://github.com/jiroshimaya/xfmido" }
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
