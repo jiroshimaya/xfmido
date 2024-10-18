@@ -1,6 +1,6 @@
 [project]
 name = "xfmido"
-version = "0.0.1"
+version = "0.0.2"
 description = "A modified version of the Mido library to handle XF format MIDI files."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -33,5 +33,4 @@ dev-dependencies = [
 test = "pytest"
 lint = "uvx ruff check ."
 format = "uvx ruff format ."
-
 
