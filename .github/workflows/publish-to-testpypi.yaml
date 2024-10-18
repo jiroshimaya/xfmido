@@ -1,7 +1,7 @@
 name: PublishToTestPyPI
 
 on:
-  workflow_dispatch:
+  workflow_dispatch
 
 env:
   TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
