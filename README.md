@@ -3,7 +3,7 @@
 XFMIDO is a Python library for processing XF (eXtended Format) MIDI data.
 This library is Based on the [mido](https://github.com/mido/mido) library.
 
-#### English | [日本語](./README.ja.md)
+#### English | [日本語](https://github.com/jiroshimaya/xfmido/blob/main/README.ja.md)
 
 ## Features
 
