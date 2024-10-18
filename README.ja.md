@@ -1,8 +1,9 @@
 # XFMIDO
 
-XFMIDOは、XF（拡張フォーマット）MIDIデータ処理のためのPythonライブラリです。
+XFMIDOは、XF（拡張フォーマット）MIDIデータ処理のためのPythonライブラリです。  
 [mido](https://github.com/mido/mido)をベースとしています。
 
+#### [English](./README.md) | 日本語
 ## 特徴
 
 - XF準拠のヘッダー（XFIH）およびカラオケ情報（XFKM）チャンクの読み取り
