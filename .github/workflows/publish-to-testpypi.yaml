@@ -11,6 +11,7 @@ on:
 
 env:
   TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
+  REPO_ACCESS_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
 
 jobs:
   publish:
@@ -24,7 +25,7 @@ jobs:
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
         git tag ${{ github.event.inputs.tag }}
-        git push origin ${{ github.event.inputs.tag }}
+        git push https://x-access-token:${{ env.REPO_ACCESS_TOKEN }}@github.com/${{ github.repository }} ${{ github.event.inputs.tag }}
 
     - name: Install uv
       uses: astral-sh/setup-uv@v3
