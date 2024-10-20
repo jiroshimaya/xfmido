@@ -27,8 +27,8 @@ jobs:
 
     - name: Update Version
       run: |
-        chmod +x ./github/scripts/update_version.sh
-        new_version=$(./github/scripts/update_version.sh ${{ github.event.inputs.version_type }})
+        chmod +x .github/scripts/update_version.sh
+        new_version=$(.github/scripts/update_version.sh ${{ github.event.inputs.version_type }})
         echo "New version is $new_version"
         echo "new_version=$new_version" >> $GITHUB_ENV
     
