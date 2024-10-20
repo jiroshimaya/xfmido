@@ -31,4 +31,4 @@ esac
 
 # Output the new version
 new_version="v${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
-echo $$new_version
+echo $new_version
