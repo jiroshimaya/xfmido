@@ -1,0 +1,27 @@
+name: UpdateVersion
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: Version Type
+        required: true
+        default: patch
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+
+jobs:
+  update_version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Update Version
+      run: |
+        chmod +x ./github/scripts/update_version.sh
+        new_version=$(./github/scripts/update_version.sh ${{ github.event.inputs.version_type }})
+        echo "New version is $new_version"
