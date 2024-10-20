@@ -1,10 +1,10 @@
-name: PublishToTestPyPI
+name: PublishToPyPI
 
 on:
   workflow_dispatch:
 
 env:
-  TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
+  PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
 
 jobs:
   publish:
@@ -21,5 +21,5 @@ jobs:
     - name: Build
       run: uv build
 
-    - name: Publish to TestPyPI
-      run: uv publish --publish-url https://test.pypi.org/legacy/ --token ${{ env.TEST_PYPI_TOKEN }}
+    - name: Publish to PyPI
+      run: uv publish --token ${{ env.PYPI_TOKEN }}
