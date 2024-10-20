@@ -2,6 +2,12 @@ name: PublishToTestPyPI
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Dry Run
+        required: false
+        default: false
+        type: boolean
 
 env:
   TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
@@ -22,4 +28,10 @@ jobs:
       run: uv build
 
     - name: Publish to TestPyPI
-      run: uv publish --publish-url https://test.pypi.org/legacy/ --token ${{ env.TEST_PYPI_TOKEN }}
+      run: |
+        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+          package_name=$(ls dist | grep '\.tar\.gz' | head -n 1)
+          echo "Dry run mode: Skipping publish to TestPyPI. Package built: $package_name"
+        else
+          uv publish --publish-url https://test.pypi.org/legacy/ --token ${{ env.TEST_PYPI_TOKEN }}
+        fi
