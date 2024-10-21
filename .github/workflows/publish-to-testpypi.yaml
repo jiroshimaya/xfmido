@@ -27,10 +27,7 @@ jobs:
         enable-cache: true
 
     - name: Build
-      run: |
-        uv build
-        package_name=$(ls dist | grep '\.tar\.gz' | head -n 1)
-        echo "Package built: $package_name"
+      run: uv build
 
     - name: Publish to TestPyPI
       if: ${{ !inputs.dry_run }}
