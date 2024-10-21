@@ -2,23 +2,25 @@
 
 # Initialize variables
 version=""
-type=""
+increment=""
 dryrun=false
+recreate=false
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -v|--version) version="$2"; shift ;;
-        -t|--type) type="$2"; shift ;;
-        -dr|--dryrun) dryrun=true ;;
+        -i|--increment) increment="$2"; shift ;;
+        -d|--dryrun) dryrun=true ;;
+        -r|--recreate) recreate=true ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 
-# Validate type
-if [[ "$type" && "$type" != "major" && "$type" != "minor" && "$type" != "patch" && "$type" != "recreate" ]]; then
-    echo "Invalid version type: $type"
+# Validate increment
+if [[ "$increment" && "$increment" != "major" && "$increment" != "minor" && "$increment" != "patch" ]]; then
+    echo "Invalid version increment: $increment"
     exit 1
 fi
 
@@ -27,7 +29,7 @@ if [[ -n "$version" ]]; then
     new_version=$version
 else 
     # Get the current version if not provided
-    current_version=$(git describe --tags --abbrev=0)
+    current_version=$(git ls-remote --tags origin | awk -F'/' '{print $3}' | grep '^v' | sort -V | tail -n1)
 
     # Remove the leading 'v'
     current_version=${current_version#v}
@@ -35,8 +37,8 @@ else
     # Split the version number
     IFS='.' read -r -a version_parts <<< "$current_version"
 
-    # Update the version based on the type
-    case "$type" in
+    # Update the version based on the increment
+    case "$increment" in
         major)
             ((version_parts[0]++))
             version_parts[1]=0
@@ -58,29 +60,17 @@ echo $new_version
 
 # Tag the new version
 if [ "$dryrun" = false ]; then
-    if ! git tag "$new_version"; then
-        if [[ "$type" == "recreate" ]]; then
-            echo "Deleting tag $new_version"
+    if [ "$recreate" = true ]; then
+        if git rev-parse "$new_version" >/dev/null 2>&1; then
             git tag -d "$new_version"
-            echo "Recreating tag $new_version"
-            git tag "$new_version"
-        else
-            echo "Failed to create the new tag"
-            exit 1
         fi
-    fi
-    # Push the new tag to the origin
-    if ! git push origin "$new_version"; then
-        if [[ "$type" == "recreate" ]]; then
-            echo "Deleting tag $new_version"
+        if git ls-remote --tags origin | grep -q "refs/tags/$new_version"; then
             git push --delete origin "$new_version"
-            echo "Pushing tag $new_version"
-            git push origin "$new_version"
-        else
-            echo "Failed to push the new tag"
-            exit 1
         fi
     fi
+
+    git tag "$new_version"
+    git push origin "$new_version"
 else
     echo "Dry run enabled, not tagging or pushing."
 fi
