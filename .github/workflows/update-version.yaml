@@ -35,12 +35,9 @@ jobs:
         echo "new_version=$new_version" >> $GITHUB_ENV
     
     - name: Create Git Tag
-      if: ${{ github.event.inputs.dry_run == 'false' }}
+      if: ${{ !inputs.dry_run }}
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
         git tag ${{ env.new_version }}
         git push origin ${{ env.new_version }}
-
-    - name: Debug Dry Run
-      run: echo "Dry run is ${{ github.event.inputs.dry_run }}"
