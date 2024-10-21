@@ -2,6 +2,12 @@ name: PublishToPyPI
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Dry Run
+        required: false
+        default: false
+        type: boolean
 
 env:
   PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
@@ -24,4 +30,5 @@ jobs:
       run: uv build
 
     - name: Publish to PyPI
+      if: ${{ !inputs.dry_run }}
       run: uv publish --token ${{ env.PYPI_TOKEN }}
