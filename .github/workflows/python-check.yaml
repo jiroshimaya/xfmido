@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main  # ここでPRをトリガーするブランチを指定
+    paths:
+      - '**/*.py'  # .pyファイルに変更があったときのみトリガー
 
 jobs:
   test:

@@ -1,0 +1,43 @@
+name: UpdateVersion
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: Version Type
+        required: true
+        default: patch
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+      dry_run:
+        description: Dry Run
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  update_version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Update Version
+      run: |
+        chmod +x .github/scripts/update_version.sh
+        new_version=$(.github/scripts/update_version.sh ${{ github.event.inputs.version_type }})
+        echo "New version is $new_version"
+        echo "new_version=$new_version" >> $GITHUB_ENV
+    
+    - name: Create Git Tag
+      if: ${{ !inputs.dry_run }}
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git tag ${{ env.new_version }}
+        git push origin ${{ env.new_version }}
