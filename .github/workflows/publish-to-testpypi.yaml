@@ -28,7 +28,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Fetch Tags
+      if: ${{ inputs.version == '' && inputs.recreate == false }}
+      run: git fetch --tags
+
     - name: Update Version
+      if: ${{ inputs.version != '' || inputs.recreate == true }}
       run: |
         args=""
         if [ -n "${{ inputs.version }}" ]; then
