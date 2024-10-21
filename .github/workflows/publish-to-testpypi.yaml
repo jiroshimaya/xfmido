@@ -18,6 +18,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Install uv
       uses: astral-sh/setup-uv@v3
@@ -25,13 +27,11 @@ jobs:
         enable-cache: true
 
     - name: Build
-      run: uv build
+      run: |
+        uv build
+        package_name=$(ls dist | grep '\.tar\.gz' | head -n 1)
+        echo "Package built: $package_name"
 
     - name: Publish to TestPyPI
-      run: |
-        if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-          package_name=$(ls dist | grep '\.tar\.gz' | head -n 1)
-          echo "Dry run mode: Skipping publish to TestPyPI. Package built: $package_name"
-        else
-          uv publish --publish-url https://test.pypi.org/legacy/ --token ${{ env.TEST_PYPI_TOKEN }}
-        fi
+      if: ${{ !inputs.dry_run }}
+      run: uv publish --publish-url https://test.pypi.org/legacy/ --token ${{ env.TEST_PYPI_TOKEN }}
