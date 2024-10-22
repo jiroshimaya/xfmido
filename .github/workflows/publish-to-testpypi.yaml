@@ -43,9 +43,9 @@ jobs:
           args="$args -r"
         fi
         if [ "${{ inputs.dry_run }}" = "true" ]; then
-          args="$args -d"
+          args="$args -n"
         fi
-        sh .github/scripts/update_version.sh $args
+        bash .github/scripts/update_version.sh $args
 
     - name: Install uv
       uses: astral-sh/setup-uv@v3

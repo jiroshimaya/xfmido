@@ -5,6 +5,7 @@ version=""
 increment=""
 dryrun=false
 recreate=false
+nopush=false
 
 # Parse arguments
 while [[ "$#" -gt 0 ]]; do
@@ -13,6 +14,7 @@ while [[ "$#" -gt 0 ]]; do
         -i|--increment) increment="$2"; shift ;;
         -d|--dryrun) dryrun=true ;;
         -r|--recreate) recreate=true ;;
+        -n|--nopush) nopush=true ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -35,7 +37,7 @@ else
     current_version=${current_version#v}
 
     # Split the version number
-    IFS='.' read -r -a version_parts <<< "$current_version"
+    IFS='.' set -- $current_version; version_parts=($1 $2 $3)
 
     # Update the version based on the increment
     case "$increment" in
@@ -58,19 +60,31 @@ else
 fi
 echo $new_version
 
-# Tag the new version
-if [ "$dryrun" = false ]; then
+# 新しいバージョンのタグを作成
+create_tag() {
     if [ "$recreate" = true ]; then
         if git rev-parse "$new_version" >/dev/null 2>&1; then
             git tag -d "$new_version"
         fi
+    fi
+    git tag "$new_version"
+}
+
+# 新しいバージョンのタグをプッシュ
+push_tag() {
+    if [ "$recreate" = true ]; then
         if git ls-remote --tags origin | grep -q "refs/tags/$new_version"; then
             git push --delete origin "$new_version"
         fi
     fi
-
-    git tag "$new_version"
     git push origin "$new_version"
+}
+
+if [ "$dryrun" = false ]; then
+    create_tag
+    if [ "$nopush" = false ]; then
+        push_tag
+    fi
 else
     echo "Dry run enabled, not tagging or pushing."
 fi
