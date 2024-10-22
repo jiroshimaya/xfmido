@@ -37,7 +37,7 @@ else
     current_version=${current_version#v}
 
     # Split the version number
-    IFS='.' set -- $current_version; version_parts=($1 $2 $3)
+    IFS='.' read -r -a version_parts <<< "$current_version"
 
     # Update the version based on the increment
     case "$increment" in
