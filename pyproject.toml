@@ -40,7 +40,7 @@ markers = [
 [tool.taskipy.tasks]
 test-workflow-py = "pytest -m 'workflow' --override-ini=addopts="
 test-workflow = "bats tests/workflow/test_workflow.bats"
-test-act-sample = "act -j publish -W .github/workflows/publish-to-testpypi.yaml -e tests/workflow/event.json"
+act-sample = "act -j publish -W .github/workflows/publish-to-testpypi.yaml -e tests/workflow/event.json"
 test = "pytest"
 lint = "uvx ruff check ."
 format = "uvx ruff format ."
