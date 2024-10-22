@@ -32,7 +32,9 @@ dev-dependencies = [
 [tool.hatch.version]
 source = "vcs"
 [tool.taskipy.tasks]
-test = "pytest"
+"test all" = "pytest"
+"test workflow" = "pytest -m 'workflow'"
+test = "pytest -m 'not workflow'"
 lint = "uvx ruff check ."
 format = "uvx ruff format ."
 
