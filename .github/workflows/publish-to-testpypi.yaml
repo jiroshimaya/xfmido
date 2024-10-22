@@ -3,6 +3,15 @@ name: PublishToTestPyPI
 on:
   workflow_dispatch:
     inputs:
+      version:
+        description: Version (must follow semantic versioning and start with 'v')
+        required: false
+        type: string
+      recreate:
+        description: Recreate Tag
+        required: false
+        default: false
+        type: boolean
       dry_run:
         description: Dry Run
         required: false
@@ -18,8 +27,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+
+    - name: Fetch Tags
+      if: ${{ inputs.version == '' && inputs.recreate == false }}
+      run: git fetch --tags
+
+    - name: Update Version
+      if: ${{ inputs.version != '' || inputs.recreate == true }}
+      run: |
+        args=""
+        if [ -n "${{ inputs.version }}" ]; then
+          args="$args -v ${{ inputs.version }}"
+        fi
+        if [ "${{ inputs.recreate }}" = "true" ]; then
+          args="$args -r"
+        fi
+        if [ "${{ inputs.dry_run }}" = "true" ]; then
+          args="$args -n"
+        fi
+        bash .github/scripts/update_version.sh $args
 
     - name: Install uv
       uses: astral-sh/setup-uv@v3
