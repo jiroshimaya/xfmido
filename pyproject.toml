@@ -31,10 +31,17 @@ dev-dependencies = [
 ]
 [tool.hatch.version]
 source = "vcs"
+
+[tool.pytest.ini_options]
+addopts = "-m 'not workflow'"
+markers = [
+    "workflow: Marker indicating tests related to github actions workflows",
+]
 [tool.taskipy.tasks]
-"test all" = "pytest"
-"test workflow" = "pytest -m 'workflow'"
-test = "pytest -m 'not workflow'"
+test-workflow-py = "pytest -m 'workflow' --override-ini=addopts="
+test-workflow = "bats tests/workflow/test_workflow.bats"
+test-act-sample = "act -j publish -W .github/workflows/publish-to-testpypi.yaml -e tests/workflow/event.json"
+test = "pytest"
 lint = "uvx ruff check ."
 format = "uvx ruff format ."
 
